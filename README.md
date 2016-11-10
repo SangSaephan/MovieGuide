@@ -7,4 +7,4 @@ A movie guide app that displays an overview of movies currently in theaters; wri
 ![](MoveGuide.gif)
 
 ##Features Added:
-- Pull-to-Refresh (makes a call to the API for new movies)
+- Pull-to-Refresh (makes a call to the API for new movies, if available)
