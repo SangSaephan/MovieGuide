@@ -25,7 +25,7 @@ class MovieDetailController: UIViewController {
         self.overviewLabel.text = movie?.movieOverview
         
         if(movie?.movieBackdropPathUrl != nil) {
-            backdropImageView.af_setImageWithURL(movie!.movieBackdropPathUrl!)
+            backdropImageView.af_setImageWithURL(NSURL(string: movie!.movieBackdropPathUrl!)!)
         }
     }
 

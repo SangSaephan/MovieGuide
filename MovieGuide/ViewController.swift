@@ -8,23 +8,53 @@
 
 import UIKit
 import Alamofire
+import Realm
+import RealmSwift
 
 let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+let realmObject = try! Realm()
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     
     var movies: [Movie]? = []
+    var refreshControl: UIRefreshControl!
+    var date = NSDate()
+    let dateFormatter = NSDateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // Set style for date formatter
+        dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
+        
         tableView.dataSource = self
         tableView.delegate = self
         
-        makeAPICall()
+        // Implement pull-to-refresh function
+        refreshControl = UIRefreshControl()
+        refreshControl.attributedTitle = NSAttributedString(string: "Last updated: " + dateFormatter.stringFromDate(date))
+        refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.addSubview(refreshControl)
+        
+        //Realm db path: DEBUG
+        print(Realm.Configuration.defaultConfiguration.description)
+        
+        let dbMovies = realmObject.objects(Movie.self)
+        
+        if dbMovies.count > 0 {
+            print("Found movies in DB")
+            var newMoviesArray = [Movie]()
+            for movie in dbMovies {
+                newMoviesArray.append(movie)
+            }
+            movies = newMoviesArray
+        } else {
+            //make API call and save data in the realm db
+            makeAPICall()
+        }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -58,6 +88,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
             }
         }
+    }
+    
+    func refresh(sender: AnyObject) {
+        makeAPICall()
+        tableView.reloadData()
+        refreshControl.endRefreshing()
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

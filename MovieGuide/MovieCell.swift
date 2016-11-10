@@ -19,7 +19,7 @@ class MovieCell: UITableViewCell {
             titleLabel.text = movie.movieTitle!
             
             if(movie.moviePosterUrl != nil) {
-                posterImageView.af_setImageWithURL(movie.moviePosterUrl!)
+                posterImageView.af_setImageWithURL(NSURL(string: movie.moviePosterUrl!)!)
             }
         }
     }
