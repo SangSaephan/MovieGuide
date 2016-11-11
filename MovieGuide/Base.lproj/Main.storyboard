@@ -28,24 +28,40 @@
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="148"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fastfive" translatesAutoresizingMaskIntoConstraints="NO" id="vcJ-dN-GAE">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="not-available" translatesAutoresizingMaskIntoConstraints="NO" id="vcJ-dN-GAE">
                                                     <rect key="frame" x="15" y="7" width="93" height="133"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="93" id="8xY-Yl-1sA"/>
                                                         <constraint firstAttribute="height" constant="133" id="BBz-9i-AmI"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fast Five" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RMc-p7-bB9">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RMc-p7-bB9">
                                                     <rect key="frame" x="116" y="64" width="163" height="20"/>
                                                     <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="20"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VZ3-Aq-rJ4">
+                                                    <rect key="frame" x="116" y="126" width="28" height="14"/>
+                                                    <fontDescription key="fontDescription" name="TimesNewRomanPSMT" family="Times New Roman" pointSize="12"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iou-Wm-J7o">
+                                                    <rect key="frame" x="259" y="126" width="28" height="14"/>
+                                                    <fontDescription key="fontDescription" name="TimesNewRomanPSMT" family="Times New Roman" pointSize="12"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="iou-Wm-J7o" secondAttribute="bottom" constant="8" id="22F-LK-JWx"/>
+                                                <constraint firstItem="VZ3-Aq-rJ4" firstAttribute="leading" secondItem="vcJ-dN-GAE" secondAttribute="trailing" constant="8" id="RJy-P7-CaY"/>
                                                 <constraint firstItem="vcJ-dN-GAE" firstAttribute="centerY" secondItem="mrF-gM-pYx" secondAttribute="centerY" id="UTK-mc-ATS"/>
                                                 <constraint firstAttribute="trailing" secondItem="RMc-p7-bB9" secondAttribute="trailing" constant="8" id="V9b-qc-j1R"/>
+                                                <constraint firstAttribute="trailing" secondItem="iou-Wm-J7o" secondAttribute="trailing" id="c7e-Xu-FTl"/>
                                                 <constraint firstItem="RMc-p7-bB9" firstAttribute="leading" secondItem="vcJ-dN-GAE" secondAttribute="trailing" constant="8" id="lFa-8k-s2h"/>
+                                                <constraint firstAttribute="bottom" secondItem="VZ3-Aq-rJ4" secondAttribute="bottom" constant="8" id="mwH-Hr-DCb"/>
                                                 <constraint firstItem="vcJ-dN-GAE" firstAttribute="leading" secondItem="mrF-gM-pYx" secondAttribute="leading" constant="15" id="tS8-cB-B2O"/>
                                                 <constraint firstItem="RMc-p7-bB9" firstAttribute="centerY" secondItem="mrF-gM-pYx" secondAttribute="centerY" id="yct-JH-T5D"/>
                                             </constraints>
@@ -53,7 +69,9 @@
                                         <color key="backgroundColor" red="0.037360869964739842" green="0.098817715314343205" blue="0.29290956439393956" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="posterImageView" destination="vcJ-dN-GAE" id="tfY-lh-Dac"/>
+                                            <outlet property="releaseDateLabel" destination="VZ3-Aq-rJ4" id="Qvs-VJ-8gQ"/>
                                             <outlet property="titleLabel" destination="RMc-p7-bB9" id="qJI-Dl-9Bd"/>
+                                            <outlet property="voteAverageLabel" destination="iou-Wm-J7o" id="oLa-Ua-M0N"/>
                                             <segue destination="R7k-X7-c1y" kind="push" id="nqY-ey-4S9"/>
                                         </connections>
                                     </tableViewCell>
@@ -88,22 +106,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fastfivebackdrop" translatesAutoresizingMaskIntoConstraints="NO" id="DUS-MX-0au">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image-Not-Available" translatesAutoresizingMaskIntoConstraints="NO" id="DUS-MX-0au">
                                 <rect key="frame" x="0.0" y="64" width="320" height="171"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="JBX-Gh-LbJ"/>
                                     <constraint firstAttribute="height" constant="171" id="iWg-eg-VF8"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g7u-Nj-oFO">
-                                <rect key="frame" x="87" y="260" width="146" height="22"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g7u-Nj-oFO">
+                                <rect key="frame" x="15" y="260" width="290" height="22"/>
                                 <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IbG-3w-FiQ">
-                                <rect key="frame" x="8" y="290" width="304" height="270"/>
-                                <string key="text">Dominic Toretto and his crew of street racers plan a massive heist to buy their freedom while in the sights of a powerful Brazilian drug lord and a dangerous federal agent. </string>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="OverView" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IbG-3w-FiQ">
+                                <rect key="frame" x="15" y="290" width="290" height="270"/>
                                 <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -116,11 +133,13 @@
                             <constraint firstItem="cta-fX-wKx" firstAttribute="top" secondItem="IbG-3w-FiQ" secondAttribute="bottom" constant="8" id="9Sf-WB-gXI"/>
                             <constraint firstItem="g7u-Nj-oFO" firstAttribute="top" secondItem="DUS-MX-0au" secondAttribute="bottom" constant="25" id="EMw-YX-Uv8"/>
                             <constraint firstItem="IbG-3w-FiQ" firstAttribute="centerX" secondItem="HCR-hI-XEG" secondAttribute="centerX" id="I4a-KY-MVG"/>
+                            <constraint firstAttribute="trailing" secondItem="g7u-Nj-oFO" secondAttribute="trailing" constant="15" id="RZ1-M8-o8Y"/>
+                            <constraint firstItem="g7u-Nj-oFO" firstAttribute="leading" secondItem="HCR-hI-XEG" secondAttribute="leading" constant="15" id="XTI-r4-fg9"/>
                             <constraint firstItem="DUS-MX-0au" firstAttribute="leading" secondItem="HCR-hI-XEG" secondAttribute="leading" id="Ysp-UF-u6R"/>
-                            <constraint firstAttribute="trailing" secondItem="IbG-3w-FiQ" secondAttribute="trailing" constant="8" id="e3d-OA-IIm"/>
+                            <constraint firstAttribute="trailing" secondItem="IbG-3w-FiQ" secondAttribute="trailing" constant="15" id="e3d-OA-IIm"/>
                             <constraint firstItem="DUS-MX-0au" firstAttribute="top" secondItem="PSP-Gn-wtN" secondAttribute="bottom" id="gdv-EQ-wpl"/>
                             <constraint firstAttribute="trailing" secondItem="DUS-MX-0au" secondAttribute="trailing" id="qcm-bA-GSx"/>
-                            <constraint firstItem="IbG-3w-FiQ" firstAttribute="leading" secondItem="HCR-hI-XEG" secondAttribute="leading" constant="8" id="s2k-m7-3Fh"/>
+                            <constraint firstItem="IbG-3w-FiQ" firstAttribute="leading" secondItem="HCR-hI-XEG" secondAttribute="leading" constant="15" id="s2k-m7-3Fh"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Movie Detail" id="Oqv-od-z2o"/>
@@ -154,7 +173,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="fastfive" width="800" height="1200"/>
-        <image name="fastfivebackdrop" width="300" height="168"/>
+        <image name="Image-Not-Available" width="1000" height="665"/>
+        <image name="not-available" width="800" height="800"/>
     </resources>
 </document>

@@ -51,6 +51,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 newMoviesArray.append(movie)
             }
             movies = newMoviesArray
+            sortMovies(&movies!)
         } else {
             //make API call and save data in the realm db
             makeAPICall()
@@ -84,15 +85,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 else {
                     print("Connection to API successful!")
                     self.movies = Movie.movies((json["results"] as? [NSDictionary])!)
+                    self.sortMovies(&self.movies!)
                     self.tableView.reloadData()
                 }
             }
         }
     }
     
+    // Called when view is pulled to refresh
     func refresh(sender: AnyObject) {
         makeAPICall()
-        tableView.reloadData()
         refreshControl.endRefreshing()
     }
 
@@ -107,6 +109,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let movieDetailController = segue.destinationViewController as! MovieDetailController
         
         movieDetailController.movie = movie
+    }
+    
+    // Sorts movies by release date
+    func sortMovies(inout movies: [Movie]) {
+        var temp: Movie?
+        var j: Int
+        
+        for i in 1..<movies.count {
+            j = i
+            while(j > 0 && movies[j].movieReleaseDate > movies[j - 1].movieReleaseDate) {
+                temp = movies[j]
+                movies[j] = movies[j - 1]
+                movies[j - 1] = temp!
+                j--
+            }
+        }
     }
 
 }

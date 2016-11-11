@@ -13,6 +13,12 @@ class MovieCell: UITableViewCell {
 
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var releaseDateLabel: UILabel!
+    @IBOutlet weak var voteAverageLabel: UILabel!
+    let dateFormatter = NSDateFormatter()
+    let stringFormatter = NSDateFormatter()
+    var date: NSDate?
+    var stringDate: String?
     
     var movie : Movie! {
         didSet {
@@ -21,6 +27,26 @@ class MovieCell: UITableViewCell {
             if(movie.moviePosterUrl != nil) {
                 posterImageView.af_setImageWithURL(NSURL(string: movie.moviePosterUrl!)!)
             }
+            
+            // Convert release date to NSDate(), the convert back to String in correct format
+            dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            stringFormatter.dateFormat = "MMM dd, yyyy"
+            date = dateFormatter.dateFromString(movie.movieReleaseDate!)
+            stringDate = stringFormatter.stringFromDate(date!)
+            releaseDateLabel.text = "Released: " + stringDate!
+            
+            // Color code the ratings based on its value
+            switch(movie.movieVoteAverage) {
+            case 0, 1, 2, 3:
+                voteAverageLabel.textColor = UIColor.redColor()
+            case 8, 9, 10:
+                voteAverageLabel.textColor = UIColor.greenColor()
+            default:
+                voteAverageLabel.textColor = UIColor.yellowColor()
+            }
+            
+            voteAverageLabel.text = "Rating: " + String(movie.movieVoteAverage) + "/10"
         }
     }
     
