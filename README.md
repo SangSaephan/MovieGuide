@@ -11,7 +11,8 @@ APIs Used: OMDb, The Movie DB
 ##Features/Functions Added:
 - Pull-to-Refresh (makes a call to the API for new movies, if available)
 - Movie release date, as well as movie rating
-- Sort functions
+- Sort functions (A-Z, Movie Rating, Movie Release Date)
+- Additional API calls to retrieve more movie info
 
 ##Bugs Fixed:
 - Duplicate movies being added to Realm database
