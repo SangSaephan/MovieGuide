@@ -17,15 +17,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bigscreen" translatesAutoresizingMaskIntoConstraints="NO" id="Zcb-FQ-fSZ">
-                                <rect key="frame" x="40" y="164" width="240" height="240"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="theater" translatesAutoresizingMaskIntoConstraints="NO" id="Zcb-FQ-fSZ">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="L1S-bN-kJg"/>
-                                    <constraint firstAttribute="height" constant="240" id="aOL-1E-R5R"/>
+                                    <constraint firstAttribute="width" constant="320" id="8e8-UQ-e0M"/>
+                                    <constraint firstAttribute="height" constant="568" id="Li4-j9-Sfd"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie Guide" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lsl-1w-HxC">
-                                <rect key="frame" x="33" y="90" width="255" height="54"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie Guide" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fpj-FF-VNX">
+                                <rect key="frame" x="66" y="98" width="189" height="286"/>
                                 <fontDescription key="fontDescription" name="TimesNewRomanPSMT" family="Times New Roman" pointSize="48"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -33,19 +33,25 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="fpj-FF-VNX" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="66" id="5V7-PB-K6M"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="fpj-FF-VNX" secondAttribute="bottom" constant="184" id="FAY-Yi-Qf0"/>
+                            <constraint firstAttribute="trailing" secondItem="fpj-FF-VNX" secondAttribute="trailing" constant="65" id="Jsp-So-2aR"/>
                             <constraint firstItem="Zcb-FQ-fSZ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Lex-So-Mdn"/>
-                            <constraint firstItem="lsl-1w-HxC" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="aQe-0v-CP7"/>
-                            <constraint firstItem="Zcb-FQ-fSZ" firstAttribute="top" secondItem="lsl-1w-HxC" secondAttribute="bottom" constant="20" id="gUD-Wd-Ol0"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Zcb-FQ-fSZ" secondAttribute="bottom" id="O0m-7C-CCy"/>
+                            <constraint firstAttribute="trailing" secondItem="Zcb-FQ-fSZ" secondAttribute="trailing" id="Ufp-7g-G1d"/>
+                            <constraint firstItem="fpj-FF-VNX" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="78" id="aA7-Db-Dkn"/>
                             <constraint firstItem="Zcb-FQ-fSZ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="kIx-rz-piy"/>
+                            <constraint firstItem="Zcb-FQ-fSZ" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="pKZ-wc-foY"/>
+                            <constraint firstItem="Zcb-FQ-fSZ" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="thY-94-KG6"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="28.266666666666666" y="355"/>
+            <point key="canvasLocation" x="28" y="355"/>
         </scene>
     </scenes>
     <resources>
-        <image name="bigscreen" width="772" height="770"/>
+        <image name="theater" width="1600" height="1051"/>
     </resources>
 </document>
