@@ -17,11 +17,60 @@ let realmObject = try! Realm()
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBAction func alphabeticalSort(sender: AnyObject) {
+        var temp: Movie?
+        var j: Int
+        
+        for i in 1..<movies!.count {
+            j = i
+            while(j > 0 && movies![j].movieTitle < movies![j - 1].movieTitle) {
+                temp = movies![j]
+                movies![j] = movies![j - 1]
+                movies![j - 1] = temp!
+                j--
+            }
+        }
+        
+        tableView.reloadData()
+    }
+    @IBAction func ratingSort(sender: AnyObject) {
+        var temp: Movie?
+        var j: Int
+        
+        for i in 1..<movies!.count {
+            j = i
+            while(j > 0 && movies![j].movieVoteAverage > movies![j - 1].movieVoteAverage) {
+                temp = movies![j]
+                movies![j] = movies![j - 1]
+                movies![j - 1] = temp!
+                j--
+            }
+        }
+        
+        tableView.reloadData()
+    }
+    @IBAction func releaseDateSort(sender: AnyObject) {
+        var temp: Movie?
+        var j: Int
+        
+        for i in 1..<movies!.count {
+            j = i
+            while(j > 0 && movies![j].movieReleaseDate > movies![j - 1].movieReleaseDate) {
+                temp = movies![j]
+                movies![j] = movies![j - 1]
+                movies![j - 1] = temp!
+                j--
+            }
+        }
+        
+        tableView.reloadData()
+    }
     
     var movies: [Movie]? = []
     var refreshControl: UIRefreshControl!
     var date = NSDate()
     let dateFormatter = NSDateFormatter()
+    var movieCast: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,6 +133,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
                 else {
                     print("Connection to API successful!")
+                    try! realmObject.write() {
+                        realmObject.deleteAll()
+                        realmObject.refresh()
+                        print("Database Deleted")
+                    }
                     self.movies = Movie.movies((json["results"] as? [NSDictionary])!)
                     self.sortMovies(&self.movies!)
                     self.tableView.reloadData()
@@ -105,8 +159,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let indexPath = tableView.indexPathForCell(cell)
         let movie = movies![indexPath!.row]
-        
         let movieDetailController = segue.destinationViewController as! MovieDetailController
+        let movieString = movie.movieTitle!.stringByReplacingOccurrencesOfString(" ", withString: "+")
+        
+        Alamofire.request(.GET, "http://www.omdbapi.com/?t=\(movieString)").responseJSON { response in
+            if let json = response.result.value {
+                if let error = json["Error"] as? String {
+                    print("Error: " + error)
+                } else {
+                    movieDetailController.castLabel.text = "CAST: " + (json["Actors"] as? String)!
+                    movieDetailController.directorLabel.text = "DIRECTOR: " + (json["Director"] as? String)!
+                    movieDetailController.ratedLabel.text = "RATED: " + (json["Rated"] as? String)!
+                    movieDetailController.runtimeLabel.text = "RUNTIME: " + (json["Runtime"] as? String)!
+                }
+            }
+        }
         
         movieDetailController.movie = movie
     }

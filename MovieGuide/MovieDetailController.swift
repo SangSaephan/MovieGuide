@@ -13,6 +13,10 @@ class MovieDetailController: UIViewController {
     @IBOutlet weak var backdropImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
+    @IBOutlet weak var castLabel: UILabel!
+    @IBOutlet weak var directorLabel: UILabel!
+    @IBOutlet weak var ratedLabel: UILabel!
+    @IBOutlet weak var runtimeLabel: UILabel!
     
     var movie : Movie?
     
@@ -22,7 +26,7 @@ class MovieDetailController: UIViewController {
         // Do any additional setup after loading the view.
         
         self.titleLabel.text = movie?.movieTitle
-        self.overviewLabel.text = movie?.movieOverview
+        self.overviewLabel.text = "OVERVIEW: " + (movie?.movieOverview)! as? String
         
         if(movie?.movieBackdropPathUrl != nil) {
             backdropImageView.af_setImageWithURL(NSURL(string: movie!.movieBackdropPathUrl!)!)
