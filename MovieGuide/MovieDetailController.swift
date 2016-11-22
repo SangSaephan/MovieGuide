@@ -12,21 +12,20 @@ class MovieDetailController: UIViewController {
 
     @IBOutlet weak var backdropImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var overviewLabel: UILabel!
     @IBOutlet weak var castLabel: UILabel!
     @IBOutlet weak var directorLabel: UILabel!
     @IBOutlet weak var ratedLabel: UILabel!
     @IBOutlet weak var runtimeLabel: UILabel!
+    @IBOutlet weak var overviewTextView: UITextView!
     
     var movie : Movie?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
         
         self.titleLabel.text = movie?.movieTitle
-        self.overviewLabel.text = "OVERVIEW: " + (movie?.movieOverview)! as? String
+        self.overviewTextView.text = "OVERVIEW: " + (movie?.movieOverview)!
         
         if(movie?.movieBackdropPathUrl != nil) {
             backdropImageView.af_setImageWithURL(NSURL(string: movie!.movieBackdropPathUrl!)!)

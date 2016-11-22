@@ -34,7 +34,12 @@ class MovieCell: UITableViewCell {
             stringFormatter.dateFormat = "MMM dd, yyyy"
             date = dateFormatter.dateFromString(movie.movieReleaseDate!)
             stringDate = stringFormatter.stringFromDate(date!)
-            releaseDateLabel.text = "Released: " + stringDate!
+            //releaseDateLabel.text = "Released: " + stringDate!
+            if (UIScreen.mainScreen().bounds.size.height == 568 || UIScreen.mainScreen().bounds.size.height == 480) {
+                releaseDateLabel.text = "Released:\n" + stringDate!
+            } else {
+                releaseDateLabel.text = "Released: " + stringDate!
+            }
             
             // Color code the ratings based on its value
             switch(movie.movieVoteAverage) {
@@ -53,6 +58,11 @@ class MovieCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        if (UIScreen.mainScreen().bounds.size.height == 568 || UIScreen.mainScreen().bounds.size.height == 480) {
+            titleLabel.font = titleLabel.font.fontWithSize(14)
+            releaseDateLabel.font = releaseDateLabel.font.fontWithSize(10)
+            voteAverageLabel.font = voteAverageLabel.font.fontWithSize(10)
+        }
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

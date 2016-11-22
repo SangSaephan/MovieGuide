@@ -17,6 +17,11 @@ let realmObject = try! Realm()
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var alphabeticalButton: UIBarButtonItem!
+    @IBOutlet weak var ratingButton: UIBarButtonItem!
+    @IBOutlet weak var releaseDateButton: UIBarButtonItem!
+    
+    // Sorts movies by title
     @IBAction func alphabeticalSort(sender: AnyObject) {
         var temp: Movie?
         var j: Int
@@ -31,8 +36,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
+        alphabeticalButton.tintColor = UIColor.grayColor()
+        ratingButton.tintColor = UIColor.whiteColor()
+        releaseDateButton.tintColor = UIColor.whiteColor()
+        
         tableView.reloadData()
+        tableView.setContentOffset(CGPoint.init(x: 0.0, y: -64.0), animated: false)
     }
+    // Sorts movies by rating
     @IBAction func ratingSort(sender: AnyObject) {
         var temp: Movie?
         var j: Int
@@ -47,8 +58,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
+        alphabeticalButton.tintColor = UIColor.whiteColor()
+        ratingButton.tintColor = UIColor.grayColor()
+        releaseDateButton.tintColor = UIColor.whiteColor()
+        
         tableView.reloadData()
+        tableView.setContentOffset(CGPoint.init(x: 0.0, y: -64.0), animated: false)
     }
+    // Sort movies by release date
     @IBAction func releaseDateSort(sender: AnyObject) {
         var temp: Movie?
         var j: Int
@@ -63,7 +80,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
+        alphabeticalButton.tintColor = UIColor.whiteColor()
+        ratingButton.tintColor = UIColor.whiteColor()
+        releaseDateButton.tintColor = UIColor.grayColor()
+        
         tableView.reloadData()
+        tableView.setContentOffset(CGPoint.init(x: 0.0, y: -64.0), animated: false)
     }
     
     var movies: [Movie]? = []
@@ -75,6 +97,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        releaseDateButton.tintColor = UIColor.grayColor()
+        navigationController?.navigationBar.barTintColor = UIColor.darkGrayColor()
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         
         // Set style for date formatter
         dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
@@ -133,6 +159,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
                 else {
                     print("Connection to API successful!")
+                    // Delete current database before making call for new movies
                     try! realmObject.write() {
                         realmObject.deleteAll()
                         realmObject.refresh()
@@ -162,6 +189,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let movieDetailController = segue.destinationViewController as! MovieDetailController
         let movieString = movie.movieTitle!.stringByReplacingOccurrencesOfString(" ", withString: "+")
         
+        // Makes call to another API to retrieve additional movie info
         Alamofire.request(.GET, "http://www.omdbapi.com/?t=\(movieString)").responseJSON { response in
             if let json = response.result.value {
                 if let error = json["Error"] as? String {
@@ -176,6 +204,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         movieDetailController.movie = movie
+        let backItem = UIBarButtonItem()
+        backItem.title = "Back"
+        navigationItem.backBarButtonItem = backItem
     }
     
     // Sorts movies by release date

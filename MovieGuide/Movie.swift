@@ -26,6 +26,7 @@ class Movie: Object {
         return "movieTitle"
     }
     
+    // Parses each movie
     class func newMovie(dictionary: NSDictionary) -> Movie {
         let movie = Movie()
         
@@ -49,6 +50,7 @@ class Movie: Object {
         return movie
     }
     
+    // Adds the new movie to the database
     class func movies(array: [NSDictionary]) -> [Movie] {
         var movies = [Movie]()
         for dictionary in array {
