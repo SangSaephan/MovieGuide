@@ -26,6 +26,8 @@ class MovieCell: UITableViewCell {
             
             if(movie.moviePosterUrl != nil) {
                 posterImageView.af_setImageWithURL(NSURL(string: movie.moviePosterUrl!)!)
+            } else {
+                posterImageView.image = UIImage(named: "not-available")
             }
             
             // Convert release date to NSDate(), the convert back to String in correct format
