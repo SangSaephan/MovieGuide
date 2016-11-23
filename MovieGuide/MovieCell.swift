@@ -36,7 +36,6 @@ class MovieCell: UITableViewCell {
             stringFormatter.dateFormat = "MMM dd, yyyy"
             date = dateFormatter.dateFromString(movie.movieReleaseDate!)
             stringDate = stringFormatter.stringFromDate(date!)
-            //releaseDateLabel.text = "Released: " + stringDate!
             if (UIScreen.mainScreen().bounds.size.height == 568 || UIScreen.mainScreen().bounds.size.height == 480) {
                 releaseDateLabel.text = "Released:\n" + stringDate!
             } else {
@@ -60,6 +59,8 @@ class MovieCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        // Configures font for smaller devices
         if (UIScreen.mainScreen().bounds.size.height == 568 || UIScreen.mainScreen().bounds.size.height == 480) {
             titleLabel.font = titleLabel.font.fontWithSize(14)
             releaseDateLabel.font = releaseDateLabel.font.fontWithSize(10)

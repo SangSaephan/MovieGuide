@@ -8,11 +8,13 @@
 
 import UIKit
 import Alamofire
-import Realm
-import RealmSwift
+/*import Realm
+import RealmSwift*/
+import CoreData
 
 let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-let realmObject = try! Realm()
+//let realmObject = try! Realm()
+var movieList = [NSManagedObject]()
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -21,7 +23,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var ratingButton: UIBarButtonItem!
     @IBOutlet weak var releaseDateButton: UIBarButtonItem!
     
-    // Sorts movies by title
+    /*
+    Sorts movies by title
+    */
     @IBAction func alphabeticalSort(sender: AnyObject) {
         var temp: Movie?
         var j: Int
@@ -36,6 +40,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
+        // Color-code the selected sort filter
         alphabeticalButton.tintColor = UIColor.grayColor()
         ratingButton.tintColor = UIColor.whiteColor()
         releaseDateButton.tintColor = UIColor.whiteColor()
@@ -43,7 +48,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.reloadData()
         tableView.setContentOffset(CGPoint.init(x: 0.0, y: -64.0), animated: false)
     }
-    // Sorts movies by rating
+    
+    /*
+    Sorts movies by rating
+    */
     @IBAction func ratingSort(sender: AnyObject) {
         var temp: Movie?
         var j: Int
@@ -58,6 +66,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
+        // Color-code the selected sort filter
         alphabeticalButton.tintColor = UIColor.whiteColor()
         ratingButton.tintColor = UIColor.grayColor()
         releaseDateButton.tintColor = UIColor.whiteColor()
@@ -65,7 +74,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.reloadData()
         tableView.setContentOffset(CGPoint.init(x: 0.0, y: -64.0), animated: false)
     }
-    // Sort movies by release date
+    
+    /*
+    Sort movies by release date
+    */
     @IBAction func releaseDateSort(sender: AnyObject) {
         var temp: Movie?
         var j: Int
@@ -80,6 +92,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         
+        // Color-code the selected sort filter
         alphabeticalButton.tintColor = UIColor.whiteColor()
         ratingButton.tintColor = UIColor.whiteColor()
         releaseDateButton.tintColor = UIColor.grayColor()
@@ -93,11 +106,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var date = NSDate()
     let dateFormatter = NSDateFormatter()
     var movieCast: String?
+    var movieList = [NSManagedObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // Set initial sort tab and color scheme
         releaseDateButton.tintColor = UIColor.grayColor()
         navigationController?.navigationBar.barTintColor = UIColor.darkGrayColor()
         navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
@@ -115,7 +130,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.addSubview(refreshControl)
         
         //Realm db path: DEBUG
-        print(Realm.Configuration.defaultConfiguration.description)
+        /*print(Realm.Configuration.defaultConfiguration.description)
         
         let dbMovies = realmObject.objects(Movie.self)
         
@@ -130,7 +145,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         } else {
             //make API call and save data in the realm db
             makeAPICall()
+        }*/
+        
+        // Load movies from database
+        loadMovies()
+        if movieList.count > 0 {
+            for items in movieList {
+                let movieItem = Movie(moviePosterUrl: items.valueForKey("moviePosterUrl") as? String, movieTitle: items.valueForKey("movieTitle") as? String, movieOverview: items.valueForKey("movieOverview") as? String, movieBackdropUrl: items.valueForKey("movieBackdropPathUrl") as? String, movieReleaseDate: items.valueForKey("movieReleaseDate") as? String, movieVoteAverage: items.valueForKey("movieVoteAverage") as! Int)
+                
+                movies?.append(movieItem)
+                sortMovies(&movies!)
+            }
+        } else {
+            makeAPICall()
         }
+        
+        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -142,7 +172,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
         cell.setSelected(false, animated: false)
         cell.movie = movies![indexPath.row]
-        
         return cell
     }
     
@@ -158,13 +187,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     print("Got status message: \(json["status_message"] as! String)")
                 }
                 else {
-                    print("Connection to API successful!")
                     // Delete current database before making call for new movies
-                    try! realmObject.write() {
+                    /*try! realmObject.write() {
                         realmObject.deleteAll()
                         realmObject.refresh()
                         print("Database Deleted")
-                    }
+                    }*/
+                    self.deleteMovies()
                     self.movies = Movie.movies((json["results"] as? [NSDictionary])!)
                     self.sortMovies(&self.movies!)
                     self.tableView.reloadData()
@@ -176,6 +205,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // Called when view is pulled to refresh
     func refresh(sender: AnyObject) {
         makeAPICall()
+        alphabeticalButton.tintColor = UIColor.whiteColor()
+        ratingButton.tintColor = UIColor.whiteColor()
+        releaseDateButton.tintColor = UIColor.grayColor()
         refreshControl.endRefreshing()
     }
 
@@ -204,12 +236,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         movieDetailController.movie = movie
+        
+        // Set text of back button
         let backItem = UIBarButtonItem()
         backItem.title = "Back"
         navigationItem.backBarButtonItem = backItem
     }
     
-    // Sorts movies by release date
+    /*
+    Sorts movies by release date
+    */
     func sortMovies(inout movies: [Movie]) {
         var temp: Movie?
         var j: Int
@@ -222,6 +258,47 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 movies[j - 1] = temp!
                 j--
             }
+        }
+    }
+    
+    /*
+    Load movies from the database
+    */
+    func loadMovies() {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let managedContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Movies")
+        
+        do {
+            let results =
+            try managedContext.executeFetchRequest(fetchRequest)
+            movieList = results as! [NSManagedObject]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
+    
+    /*
+    Delete movies from the database
+    */
+    func deleteMovies() {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let managedContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Movies")
+        
+        do {
+            let results =
+            try managedContext.executeFetchRequest(fetchRequest)
+            for item in results {
+                managedContext.deleteObject(item as! NSManagedObject)
+            }
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not delete \(error), \(error.userInfo)")
         }
     }
 

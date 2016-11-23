@@ -7,63 +7,95 @@
 //
 
 import UIKit
-import Realm
-import RealmSwift
+import CoreData
 
 let baseImageURL = "http://image.tmdb.org/t/p/w500"
 
-class Movie: Object {
+class Movie: NSObject {
     
-    dynamic var moviePosterUrl: String?
-    dynamic var movieTitle: String?
-    dynamic var movieOverview: String?
-    dynamic var movieBackdropPathUrl: String?
-    dynamic var movieReleaseDate: String?
-    dynamic var movieVoteAverage = 0
+    var moviePosterUrl: String?
+    var movieTitle: String?
+    var movieOverview: String?
+    var movieBackdropPathUrl: String?
+    var movieReleaseDate: String?
+    var movieVoteAverage = 0
     
     // Sets primary key so duplicate movies won't be added to database
-    override static func primaryKey() -> String? {
+    /*override static func primaryKey() -> String? {
         return "movieTitle"
-    }
+    }*/
     
     // Parses each movie
-    class func newMovie(dictionary: NSDictionary) -> Movie {
-        let movie = Movie()
-        
+    init(moviePosterUrl: String?, movieTitle: String?, movieOverview: String?, movieBackdropUrl: String?, movieReleaseDate: String?, movieVoteAverage: Int?) {
+        self.moviePosterUrl = moviePosterUrl
+        self.movieTitle = movieTitle
+        self.movieOverview = movieOverview
+        self.movieBackdropPathUrl = movieBackdropUrl
+        self.movieReleaseDate = movieReleaseDate
+        self.movieVoteAverage = movieVoteAverage!
+    }
+    
+    init(dictionary: NSDictionary){
         if let moviePosterUrlString = dictionary["poster_path"] as? String {
-            movie.moviePosterUrl = baseImageURL + moviePosterUrlString
+            moviePosterUrl = baseImageURL + moviePosterUrlString
         } else {
-            movie.moviePosterUrl = nil
+            moviePosterUrl = nil
         }
         
         if let movieBackdropPathString = dictionary["backdrop_path"] as? String {
-            movie.movieBackdropPathUrl = baseImageURL + movieBackdropPathString
+            movieBackdropPathUrl = baseImageURL + movieBackdropPathString
         } else {
-            movie.movieBackdropPathUrl = nil
+            movieBackdropPathUrl = nil
         }
         
-        movie.movieTitle = dictionary["title"] as? String
-        movie.movieOverview = dictionary["overview"] as? String
-        movie.movieReleaseDate = dictionary["release_date"] as? String
-        movie.movieVoteAverage = (dictionary["vote_average"] as? Int)!
-        
-        return movie
+        movieTitle = dictionary["title"] as? String
+        movieOverview = dictionary["overview"] as? String
+        movieReleaseDate = dictionary["release_date"] as? String
+        movieVoteAverage = (dictionary["vote_average"] as? Int)!
     }
     
     // Adds the new movie to the database
     class func movies(array: [NSDictionary]) -> [Movie] {
         var movies = [Movie]()
         for dictionary in array {
-            let movie = newMovie(dictionary)
+            let movie = Movie(dictionary: dictionary)
+            saveMovies(movie)
             
             //write the settings object to db for persistence
-            try! realmObject.write() {
-                realmObject.add(movie, update: true)
-                print("New Movie saved with name: \(movie.movieTitle)")
+            /*try! realmObject.write() {
+                realmObject.add(movie, update: true)*/
                 movies.append(movie)
-            }
+            //}
         }
         return movies
+    }
+    
+    /*
+    Save movies to database
+    */
+    class func saveMovies(movie: Movie) {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let managedContext = appDelegate.managedObjectContext
+        
+        let entity = NSEntityDescription.entityForName("Movies", inManagedObjectContext: managedContext)
+        
+        let individualMovie = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+        
+        individualMovie.setValue(movie.moviePosterUrl, forKey: "moviePosterUrl")
+        individualMovie.setValue(movie.movieTitle, forKey: "movieTitle")
+        individualMovie.setValue(movie.movieBackdropPathUrl, forKey: "movieBackdropPathUrl")
+        individualMovie.setValue(movie.movieReleaseDate, forKey: "movieReleaseDate")
+        individualMovie.setValue(movie.movieOverview, forKey: "movieOverview")
+        individualMovie.setValue(movie.movieVoteAverage, forKey: "movieVoteAverage")
+        
+        do {
+            try managedContext.save()
+            movieList.append(individualMovie)
+        } catch let error as NSError {
+            print("Could not save \(error), \(error.userInfo)")
+        }
+        
     }
 
 }
