@@ -8,6 +8,6 @@ target 'MovieGuide' do
   # Pods for MovieGuide
   pod 'Alamofire', '~> 3.0.0'
   pod 'AlamofireImage', '~> 2.0.0'
-  pod 'RealmSwift', '0.98.8'
+  #pod 'RealmSwift', '0.98.8'
 
 end
