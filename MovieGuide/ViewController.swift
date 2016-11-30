@@ -180,7 +180,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func makeAPICall() {
-        Alamofire.request(.GET, "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)").responseJSON { response in
+        Alamofire.request(.GET, "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)&region=US").responseJSON { response in
             if let json = response.result.value {
                 if let status_code = json["status_code"] as? Int {
                     print("ERROR: Unable to hit the API with status code: \(status_code)")
@@ -205,10 +205,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // Called when view is pulled to refresh
     func refresh(sender: AnyObject) {
         makeAPICall()
+        refreshControl.endRefreshing()
         alphabeticalButton.tintColor = UIColor.whiteColor()
         ratingButton.tintColor = UIColor.whiteColor()
         releaseDateButton.tintColor = UIColor.grayColor()
-        refreshControl.endRefreshing()
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
