@@ -220,12 +220,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let movie = movies![indexPath!.row]
         let movieDetailController = segue.destinationViewController as! MovieDetailController
         let movieString = movie.movieTitle!.stringByReplacingOccurrencesOfString(" ", withString: "+")
+        let releaseDate = movie.movieReleaseDate!.substringWithRange(Range<String.Index>(start: movie.movieReleaseDate!.startIndex, end: movie.movieReleaseDate!.startIndex.advancedBy(4)))
         
         // Makes call to another API to retrieve additional movie info
-        Alamofire.request(.GET, "http://www.omdbapi.com/?t=\(movieString)").responseJSON { response in
+        Alamofire.request(.GET, "http://www.omdbapi.com/?t=\(movieString)&y=\(releaseDate)").responseJSON { response in
             if let json = response.result.value {
                 if let error = json["Error"] as? String {
                     print("Error: " + error)
+                    movieDetailController.castLabel.text = "CAST: N/A"
+                    movieDetailController.directorLabel.text = "DIRECTOR: N/A"
+                    movieDetailController.ratedLabel.text = "RATED: N/A"
+                    movieDetailController.runtimeLabel.text = "RUNTIME: N/A"
                 } else {
                     movieDetailController.castLabel.text = "CAST: " + (json["Actors"] as? String)!
                     movieDetailController.directorLabel.text = "DIRECTOR: " + (json["Director"] as? String)!

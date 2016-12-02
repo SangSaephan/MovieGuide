@@ -342,7 +342,7 @@
 			baseConfigurationReference = 05C936851DB59423D6B0AC95 /* Pods-MovieGuide.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Sangtzin Saephan (577S98GACP)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MovieGuide/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -357,7 +357,7 @@
 			baseConfigurationReference = D8CEC5A396C1C7FB2EB14391 /* Pods-MovieGuide.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Sangtzin Saephan (577S98GACP)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MovieGuide/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
