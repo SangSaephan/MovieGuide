@@ -151,16 +151,39 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         loadMovies()
         if movieList.count > 0 {
             for items in movieList {
-                let movieItem = Movie(moviePosterUrl: items.valueForKey("moviePosterUrl") as? String, movieTitle: items.valueForKey("movieTitle") as? String, movieOverview: items.valueForKey("movieOverview") as? String, movieBackdropUrl: items.valueForKey("movieBackdropPathUrl") as? String, movieReleaseDate: items.valueForKey("movieReleaseDate") as? String, movieVoteAverage: items.valueForKey("movieVoteAverage") as! Int)
+                let movieItem = Movie(moviePosterUrl: items.valueForKey("moviePosterUrl") as? String, movieTitle: items.valueForKey("movieTitle") as? String, movieOverview: items.valueForKey("movieOverview") as? String, movieBackdropUrl: items.valueForKey("movieBackdropPathUrl") as? String, movieReleaseDate: items.valueForKey("movieReleaseDate") as? String, movieVoteAverage: items.valueForKey("movieVoteAverage") as! Double)
                 
+                let movieString = movieItem.movieTitle!.stringByReplacingOccurrencesOfString(" ", withString: "+")
+                let releaseDate = movieItem.movieReleaseDate!.substringWithRange(Range<String.Index>(start: movieItem.movieReleaseDate!.startIndex, end: movieItem.movieReleaseDate!.startIndex.advancedBy(4)))
+                
+                // Makes call to another API to retrieve additional movie info
+                Alamofire.request(.GET, "http://www.omdbapi.com/?t=\(movieString)&y=\(releaseDate)").responseJSON { response in
+                    if let json = response.result.value {
+                        if let error = json["Error"] as? String {
+                            print("Error: " + error)
+                            movieItem.movieVoteAverage = 0.0
+                        } else {
+                            let rating = json["imdbRating"] as! String
+                            if rating != "N/A" {
+                                movieItem.movieVoteAverage = Double(rating)!
+                            } else {
+                                movieItem.movieVoteAverage = 0.0
+                            }
+                        }
+                    }
+                }
+
                 movies?.append(movieItem)
                 sortMovies(&movies!)
             }
+            
         } else {
             makeAPICall()
         }
         
-        
+        dispatch_async(dispatch_get_main_queue(), {() -> Void in
+            self.tableView.reloadData()
+        })
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -195,6 +218,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     }*/
                     self.deleteMovies()
                     self.movies = Movie.movies((json["results"] as? [NSDictionary])!)
+                    dispatch_async(dispatch_get_main_queue(), {() -> Void in
+                        self.tableView.reloadData()
+                    })
                     self.sortMovies(&self.movies!)
                     self.tableView.reloadData()
                 }

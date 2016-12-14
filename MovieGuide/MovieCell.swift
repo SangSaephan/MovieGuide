@@ -36,23 +36,30 @@ class MovieCell: UITableViewCell {
             stringFormatter.dateFormat = "MMM dd, yyyy"
             date = dateFormatter.dateFromString(movie.movieReleaseDate!)
             stringDate = stringFormatter.stringFromDate(date!)
-            if (UIScreen.mainScreen().bounds.size.height == 568 || UIScreen.mainScreen().bounds.size.height == 480) {
+            /*if (UIScreen.mainScreen().bounds.size.height == 568 || UIScreen.mainScreen().bounds.size.height == 480) {
                 releaseDateLabel.text = "Released:\n" + stringDate!
             } else {
                 releaseDateLabel.text = "Released: " + stringDate!
-            }
+            }*/
+            
+            releaseDateLabel.text = "Release Date:\n" + stringDate!
             
             // Color code the ratings based on its value
             switch(movie.movieVoteAverage) {
-            case 0, 1, 2, 3:
+            case 0 ..< 4:
                 voteAverageLabel.textColor = UIColor.redColor()
-            case 8, 9, 10:
+            case 8 ... 10:
                 voteAverageLabel.textColor = UIColor.greenColor()
             default:
                 voteAverageLabel.textColor = UIColor.yellowColor()
             }
             
-            voteAverageLabel.text = "Rating: " + String(movie.movieVoteAverage) + "/10"
+            //voteAverageLabel.text = "Rating: " + String(movie.movieVoteAverage) + "/10"
+            if movie.movieVoteAverage == 0.0 {
+                voteAverageLabel.text = "Rating: N/A"
+            } else {
+                voteAverageLabel.text = "Rating: " + String(movie.movieVoteAverage) + "/10"
+            }
         }
     }
     

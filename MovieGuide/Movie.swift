@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Alamofire
 
 let baseImageURL = "http://image.tmdb.org/t/p/w500"
 
@@ -18,7 +19,7 @@ class Movie: NSObject {
     var movieOverview: String?
     var movieBackdropPathUrl: String?
     var movieReleaseDate: String?
-    var movieVoteAverage = 0
+    var movieVoteAverage = 0.0
     
     // Sets primary key so duplicate movies won't be added to database
     /*override static func primaryKey() -> String? {
@@ -26,7 +27,7 @@ class Movie: NSObject {
     }*/
     
     // Parses each movie
-    init(moviePosterUrl: String?, movieTitle: String?, movieOverview: String?, movieBackdropUrl: String?, movieReleaseDate: String?, movieVoteAverage: Int?) {
+    init(moviePosterUrl: String?, movieTitle: String?, movieOverview: String?, movieBackdropUrl: String?, movieReleaseDate: String?, movieVoteAverage: Double?) {
         self.moviePosterUrl = moviePosterUrl
         self.movieTitle = movieTitle
         self.movieOverview = movieOverview
@@ -36,6 +37,8 @@ class Movie: NSObject {
     }
     
     init(dictionary: NSDictionary){
+        super.init()
+        
         if let moviePosterUrlString = dictionary["poster_path"] as? String {
             moviePosterUrl = baseImageURL + moviePosterUrlString
         } else {
@@ -51,7 +54,11 @@ class Movie: NSObject {
         movieTitle = dictionary["title"] as? String
         movieOverview = dictionary["overview"] as? String
         movieReleaseDate = dictionary["release_date"] as? String
-        movieVoteAverage = (dictionary["vote_average"] as? Int)!
+        //movieVoteAverage = (dictionary["vote_average"] as? Int)!
+        
+        someRating() {rating in
+            self.movieVoteAverage = rating
+        }
     }
     
     // Adds the new movie to the database
@@ -96,6 +103,34 @@ class Movie: NSObject {
             print("Could not save \(error), \(error.userInfo)")
         }
         
+    }
+    
+    func someRating(completionHandler: (Double) -> ()) {
+        getRating(completionHandler)
+    }
+    
+    func getRating(completionHandler: (Double) -> ()) {
+        let movieString = movieTitle!.stringByReplacingOccurrencesOfString(" ", withString: "+")
+        let releaseDate = movieReleaseDate!.substringWithRange(Range<String.Index>(start: movieReleaseDate!.startIndex, end: movieReleaseDate!.startIndex.advancedBy(4)))
+        
+        // Makes call to another API to retrieve additional movie info
+        Alamofire.request(.GET, "http://www.omdbapi.com/?t=\(movieString)&y=\(releaseDate)").responseJSON { response in
+            if let json = response.result.value {
+                if let error = json["Error"] as? String {
+                    print("Error: " + error)
+                    completionHandler(0.0)
+                } else {
+                    var someRating = 0.0
+                    let rating = json["imdbRating"] as! String
+                    if rating != "N/A" {
+                        someRating = Double(rating)!
+                        completionHandler(someRating)
+                    } else {
+                        completionHandler(0.0)
+                    }
+                }
+            }
+        }
     }
 
 }
